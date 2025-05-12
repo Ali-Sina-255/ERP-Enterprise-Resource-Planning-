@@ -15,3 +15,17 @@ class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
         fields = ["id", "category", "name"]
+
+
+class VendorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = [
+            "id",
+            "name",
+            "contact_person",
+            "email",
+            "status",
+            "category",
+            "subcategory",
+        ]
