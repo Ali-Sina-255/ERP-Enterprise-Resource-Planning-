@@ -1,0 +1,8 @@
+# Ignore node modules
+node_modules/
+
+# Ignore Draw.io files
+databases.drawio
+
+# Ignore environment variable files
+.env
