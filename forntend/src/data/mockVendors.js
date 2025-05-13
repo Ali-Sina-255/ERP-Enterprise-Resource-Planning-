@@ -12,7 +12,7 @@ let nextId = 6;
 const simulateApiCall = (data, delay = 500) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(JSON.parse(JSON.stringify(data))); // Deep copy to simulate fresh data
+      resolve(JSON.parse(JSON.stringify(data))); 
     }, delay);
   });
 };
