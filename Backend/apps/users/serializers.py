@@ -1,7 +1,6 @@
 from profile import Profile
 
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -10,7 +9,13 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import Role, User, UserProfile
+from .models import ERPTYPE, Role, User, UserProfile
+
+
+class ERPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ERPTYPE
+        fields = ["id", "name", "created_at", "updated_at"]
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -31,34 +36,33 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "email",
             "phone_number",
             "role",
+            "erp_type",  # many-to-many
             "password",
             "password_confirm",
         ]
 
     def validate(self, data):
-        # Ensure passwords match
         if data["password"] != data["password_confirm"]:
             raise ValidationError("Passwords must match.")
-
-        # Ensure the role is valid
-        role = data.get("role")
-        if role not in dict(User.ROLE_CHOICES):
-            raise ValidationError("Invalid role.")
-
         return data
 
     def create(self, validated_data):
-        """Create a new user with encrypted password."""
         try:
-            # Remove the password_confirm field before creating the user
+            erp_type_data = validated_data.pop("erp_type", [])
             validated_data.pop("password_confirm", None)
+            password = validated_data.pop("password", None)
 
-            with transaction.atomic():  # Ensure atomicity
-                password = validated_data.pop("password", None)
+            with transaction.atomic():
                 user = User.objects.create(**validated_data)
-                user.set_password(password)  # Securely set the password
+                user.set_password(password)
                 user.save()
+
+                # Now set the ManyToMany field
+                if erp_type_data:
+                    user.erp_type.set(erp_type_data)
+
                 return user
+
         except Exception as e:
             raise ValidationError(f"Error creating user: {e}")
 
@@ -74,6 +78,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "role",
+            "erp_type",
             "phone_number",
             "is_admin",
             "is_free",
