@@ -11,7 +11,9 @@ import {
   X,
   ShoppingCart,
   Users as CrmIcon,
-  ClipboardList as SalesIcon, // Example icons
+  ClipboardList as SalesIcon,
+  IdCardIcon,
+  Activity, // Example icons
 } from "lucide-react";
 
 const allMenuItems = [
@@ -70,6 +72,23 @@ const allMenuItems = [
     label: "Sales Orders",
     icon: SalesIcon,
     roles: ["administrator", "manager", "sales_rep"],
+  },
+  {
+    path: "/invoicing/invoices",
+    label: "Invoicing",
+    icon: IdCardIcon,
+    roles: ["administrator", "manager", "accountant", "sales_rep"],
+  },
+  {
+    path: "/accounting/chart-of-accounts", // Path for top-level, can be more specific later
+    label: "Accounting",
+    icon: Activity,
+    roles: ["administrator", "accountant", "manager"],
+    // If you have sub-menus, this could be an object with children:
+    // children: [
+    //   { path: '/accounting/chart-of-accounts', label: 'Chart of Accounts', roles: [...] },
+    //   { path: '/accounting/journal-entries', label: 'Journal Entries', roles: [...] },
+    // ]
   },
 ];
 

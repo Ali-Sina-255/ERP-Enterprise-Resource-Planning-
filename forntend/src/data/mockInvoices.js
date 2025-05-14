@@ -3,7 +3,7 @@ import { getCustomers } from "./mockCustomers";
 // We might not need to enrich with product details directly on invoice if items are copied from SO
 // or if invoice items are more free-form. For now, let's assume items are descriptive.
 // import { getProducts } from './mockProducts';
-import { getSalesOrderById } from "./mockSalesOrders"; // To link to SO
+import { getSalesOrderById } from "./mockSalesOrders";  // To link to SO
 
 let customerCache = null;
 let salesOrderCache = {}; // Cache SOs as they are fetched for invoice generation
