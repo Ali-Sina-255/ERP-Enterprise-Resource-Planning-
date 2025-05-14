@@ -13,7 +13,9 @@ import {
   Users as CrmIcon,
   ClipboardList as SalesIcon,
   IdCardIcon,
-  Activity, // Example icons
+  Activity,
+  Joystick,
+  // Example icons
 } from "lucide-react";
 
 const allMenuItems = [
@@ -90,6 +92,8 @@ const allMenuItems = [
     //   { path: '/accounting/journal-entries', label: 'Journal Entries', roles: [...] },
     // ]
   },
+  { path: '/accounting/journal-entries', label: 'Journal Entries', icon: Joystick, roles: ['administrator', 'accountant', 'manager'] },
+
 ];
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
