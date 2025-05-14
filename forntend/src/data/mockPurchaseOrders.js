@@ -181,7 +181,7 @@ export const addPurchaseOrder = async (poData) => {
       ...item,
       quantity: parseFloat(item.quantity) || 0,
       unitPrice: parseFloat(item.unitPrice) || 0,
-      quantityReceived: 0, // Initialize quantityReceived for all new PO items
+      quantityReceived: 0,// Initialize quantityReceived for all new PO items
     })),
   };
 
@@ -368,8 +368,7 @@ export const receiveItemsForPO = async (
 
   
 
-  purchaseOrders[poIndex] = poToUpdate; // Update the original array with the modified copy
-
+  purchaseOrders[poIndex] = poToUpdate; 
   const enrichedPO = await enrichPO(poToUpdate);
   return simulateApiCall(enrichedPO);
 };
