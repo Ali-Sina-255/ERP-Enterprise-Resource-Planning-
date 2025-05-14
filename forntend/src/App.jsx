@@ -1,49 +1,53 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate, Outlet, Link } from "react-router-dom"; // Added Outlet
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+// Vendor Imports
 import VendorsPage from "./pages/vendors/VendorsPage";
 import AddVendorPage from "./pages/vendors/AddVendorPage";
 import EditVendorPage from "./pages/vendors/EditVendorPage";
 import VendorDetailPage from "./pages/vendors/VendorDetailPage";
+// Inventory Imports
 import InventoryPage from "./pages/inventory/InventoryPage";
 import ProductDetailPage from "./pages/inventory/ProductDetailPage";
+// HR Imports
 import EmployeesPage from "./pages/hr/EmployeesPage";
 import EmployeeDetailPage from "./pages/hr/EmployeeDetailPage";
+// Purchasing Imports
 import PurchaseOrdersPage from "./pages/purchasing/PurchaseOrdersPage";
 import CreatePurchaseOrderPage from "./pages/purchasing/CreatePurchaseOrderPage";
 import PurchaseOrderDetailPage from "./pages/purchasing/PurchaseOrderDetailPage";
 import EditPurchaseOrderPage from "./pages/purchasing/EditPurchaseOrderPage";
-
-import LoginPage from "./pages/LoginPage"; // Import LoginPage
-import ProtectedRoute from "./components/auth/ProtectedRoute"; // Import ProtectedRoute
-import { useAuth } from "./contexts/AuthContext"; // To get currentUser for navbar display
-
-import ProfilePage from "./pages/user/ProfilePage"; // Add this
-import SettingsPage from "./pages/SettingsPage"; 
+// CRM Imports
+import CustomersPage from "./pages/crm/CustomersPage";
+import CustomerDetailPage from "./pages/crm/CustomerDetailPage";
+import EditCustomerPage from "./pages/crm/EditCustomerPage"; // Assuming you created this
+// Sales Imports
+import SalesOrdersPage from "./pages/sales/SalesOrdersPage";
+import CreateSalesOrderPage from "./pages/sales/CreateSalesOrderPage";
+import SalesOrderDetailPage from "./pages/sales/SalesOrderDetailPage";
+import EditSalesOrderPage from "./pages/sales/EditSalesOrderPage";
+// User & Settings Imports
+import ProfilePage from "./pages/user/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "./components/common/Button";
 
-// This component will render the MainLayout only if the user is authenticated
-const AppLayout = () => {
-  // const { currentUser } = useAuth(); // Not strictly needed here if ProtectedRoute handles redirection
-  return (
-    <MainLayout>
-      <Outlet /> {/* Child routes will render here */}
-    </MainLayout>
-  );
-};
+const AppLayout = () => (
+  <MainLayout>
+    <Outlet />
+  </MainLayout>
+);
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-
-        {/* Protected Routes */}
         <Route
           element={
             <ProtectedRoute>
@@ -51,8 +55,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
 
@@ -84,41 +86,41 @@ function App() {
             element={<EditPurchaseOrderPage />}
           />
 
-          {/* Add other protected module routes here */}
-        </Route>
+          <Route path="/crm/customers" element={<CustomersPage />} />
+          <Route path="/crm/customers/:id" element={<CustomerDetailPage />} />
+          <Route
+            path="/crm/customers/:id/edit"
+            element={<EditCustomerPage />}
+          />
 
+          <Route path="/sales/sales-orders" element={<SalesOrdersPage />} />
+          <Route
+            path="/sales/sales-orders/new"
+            element={<CreateSalesOrderPage />}
+          />
+          <Route
+            path="/sales/sales-orders/:id"
+            element={<SalesOrderDetailPage />}
+          />
+          <Route
+            path="/sales/sales-orders/:id/edit"
+            element={<EditSalesOrderPage />}
+          />
+
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
         <Route
           path="*"
           element={
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-              <h2 className="text-4xl font-bold text-red-600 mb-4">404</h2>
-              <p className="text-xl text-gray-700 mb-2">
-                Oops! Page Not Found.
-              </p>
-              <p className="text-gray-500 mb-6">
-                The page you are looking for does not exist or has been moved.
-              </p>
-              <Link to="/dashboard">
-                <Button variant="primary">Go to Dashboard</Button>
-              </Link>
+            <div className="p-8 text-center">
+              <h2>404 - Page Not Found</h2>
             </div>
           }
         />
       </Routes>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </>
   );
 }
-
 export default App;
