@@ -51,6 +51,10 @@ import ChartOfAccountsPage from "./pages/accounting/ChartOfAccountsPage";
 // User & Settings Imports
 import ProfilePage from "./pages/user/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
+import JournalEntriesPage from "./pages/accounting/JournalEntriesPage"; // <<<< ADD THIS IMPORT
+import CreateJournalEntryPage from "./pages/accounting/CreateJournalEntryPage"; // <<<< ADD THIS IMPORT
+import JournalEntryDetailPage from "./pages/accounting/JournalEntryDetailPage"; // <<<< ADD THIS IMPORT
+import EditJournalEntryPage from "./pages/accounting/EditJournalEntryPage"; //
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -71,7 +75,6 @@ function App() {
         {/* Public Route */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected Routes - All routes under this will require authentication */}
         <Route
           element={
             <ProtectedRoute>
@@ -79,28 +82,17 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Default redirect to dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-
-          {/* Vendor Routes */}
+          {/* ... (All other existing Vendor, Inventory, HR, Purchasing, CRM, Sales, Invoicing routes) ... */}
           <Route path="/vendors" element={<VendorsPage />} />
-          {/* Assuming AddVendorPage is separate. If modal, this isn't needed */}
           <Route path="/vendors/new" element={<AddVendorPage />} />
           <Route path="/vendors/:id" element={<VendorDetailPage />} />
           <Route path="/vendors/:id/edit" element={<EditVendorPage />} />
-
-          {/* Inventory Routes */}
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/inventory/:id" element={<ProductDetailPage />} />
-          {/* Add/Edit for Inventory handled by modal in InventoryPage */}
-
-          {/* HR Routes */}
           <Route path="/hr/employees" element={<EmployeesPage />} />
           <Route path="/hr/employees/:id" element={<EmployeeDetailPage />} />
-          {/* Add/Edit for Employees handled by modal in EmployeesPage */}
-
-          {/* Purchasing Routes */}
           <Route
             path="/purchasing/purchase-orders"
             element={<PurchaseOrdersPage />}
@@ -117,17 +109,12 @@ function App() {
             path="/purchasing/purchase-orders/:id/edit"
             element={<EditPurchaseOrderPage />}
           />
-
-          {/* CRM (Customer) Routes */}
           <Route path="/crm/customers" element={<CustomersPage />} />
           <Route path="/crm/customers/:id" element={<CustomerDetailPage />} />
           <Route
             path="/crm/customers/:id/edit"
             element={<EditCustomerPage />}
           />
-          {/* Add for Customers handled by modal in CustomersPage */}
-
-          {/* Sales Order Routes */}
           <Route path="/sales/sales-orders" element={<SalesOrdersPage />} />
           <Route
             path="/sales/sales-orders/new"
@@ -141,8 +128,6 @@ function App() {
             path="/sales/sales-orders/:id/edit"
             element={<EditSalesOrderPage />}
           />
-
-          {/* Invoicing Routes */}
           <Route path="/invoicing/invoices" element={<InvoicesPage />} />
           <Route
             path="/invoicing/invoices/new"
@@ -156,18 +141,35 @@ function App() {
             path="/invoicing/invoices/:id/edit"
             element={<EditInvoicePage />}
           />
+          {/* Accounting Routes */}
           <Route
             path="/accounting/chart-of-accounts"
             element={<ChartOfAccountsPage />}
           />
-          {/* User and Settings Routes */}
+          <Route
+            path="/accounting/journal-entries"
+            element={<JournalEntriesPage />}
+          />{" "}
+          {/* <<<< ADD THIS ROUTE */}
+          <Route
+            path="/accounting/journal-entries/new"
+            element={<CreateJournalEntryPage />}
+          />{" "}
+          {/* <<<< ADD THIS ROUTE */}
+          <Route
+            path="/accounting/journal-entries/:id"
+            element={<JournalEntryDetailPage />}
+          />{" "}
+          {/* <<<< ADD THIS ROUTE */}
+          <Route
+            path="/accounting/journal-entries/:id/edit"
+            element={<EditJournalEntryPage />}
+          />
+          {/* <<<< ADD THIS ROUTE */}
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
-
-          {/* Add other protected module top-level routes here */}
         </Route>
 
-        {/* Catch-all 404 Not Found Page - Rendered outside ProtectedRoute if path doesn't match login or protected paths */}
         <Route
           path="*"
           element={

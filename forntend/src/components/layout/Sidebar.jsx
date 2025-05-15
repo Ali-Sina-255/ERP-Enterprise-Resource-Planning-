@@ -2,6 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import {
   LayoutDashboard,
   Users,
@@ -12,14 +13,16 @@ import {
   ShoppingCart,
   Users as CrmIcon,
   ClipboardList as SalesIcon,
-  IdCardIcon,
-  Activity, // Example icons
+  FileSpreadsheet as InvoicingIcon,
+  BookOpen as AccountingIcon,
+  ListChecks as JournalIcon,
 } from "lucide-react";
 
-const allMenuItems = [
+// Define menu items with translation keys for labels
+const allMenuItemsConfig = [
   {
     path: "/dashboard",
-    label: "Dashboard",
+    i18nKey: "dashboard",
     icon: LayoutDashboard,
     roles: [
       "administrator",
@@ -29,17 +32,18 @@ const allMenuItems = [
       "sales_rep",
       "purchasing_agent",
       "warehouse_staff",
+      "accountant",
     ],
   },
   {
     path: "/vendors",
-    label: "Vendors",
+    i18nKey: "vendors",
     icon: Users,
     roles: ["administrator", "manager", "purchasing_agent"],
   },
   {
     path: "/inventory",
-    label: "Inventory",
+    i18nKey: "inventory",
     icon: Package,
     roles: [
       "administrator",
@@ -50,53 +54,61 @@ const allMenuItems = [
     ],
   },
   {
-    path: "/hr/employees",
-    label: "HR (Employees)",
-    icon: Briefcase,
-    roles: ["administrator", "hr_manager"],
-  },
-  {
-    path: "/purchasing/purchase-orders",
-    label: "Purchasing",
-    icon: ShoppingCart,
-    roles: ["administrator", "manager", "purchasing_agent"],
-  },
-  {
     path: "/crm/customers",
-    label: "CRM (Customers)",
+    i18nKey: "crm",
     icon: CrmIcon,
     roles: ["administrator", "manager", "sales_rep"],
   },
   {
     path: "/sales/sales-orders",
-    label: "Sales Orders",
+    i18nKey: "sales",
     icon: SalesIcon,
     roles: ["administrator", "manager", "sales_rep"],
   },
   {
-    path: "/invoicing/invoices",
-    label: "Invoicing",
-    icon: IdCardIcon,
-    roles: ["administrator", "manager", "accountant", "sales_rep"],
+    path: "/purchasing/purchase-orders",
+    i18nKey: "purchasing",
+    icon: ShoppingCart,
+    roles: ["administrator", "manager", "purchasing_agent"],
   },
   {
-    path: "/accounting/chart-of-accounts", // Path for top-level, can be more specific later
-    label: "Accounting",
-    icon: Activity,
-    roles: ["administrator", "accountant", "manager"],
-    // If you have sub-menus, this could be an object with children:
-    // children: [
-    //   { path: '/accounting/chart-of-accounts', label: 'Chart of Accounts', roles: [...] },
-    //   { path: '/accounting/journal-entries', label: 'Journal Entries', roles: [...] },
-    // ]
+    path: "/invoicing/invoices",
+    i18nKey: "invoicing",
+    icon: InvoicingIcon,
+    roles: ["administrator", "manager", "accountant", "sales_rep"],
   },
+  // Example of a parent "Accounting" menu that would ideally expand
+  // For now, we link directly. A real expanding menu needs more complex state.
+  {
+    path: "/accounting/chart-of-accounts",
+    i18nKey: "chartOfAccounts",
+    parentI18nKey: "accounting",
+    icon: AccountingIcon,
+    roles: ["administrator", "accountant", "manager"],
+  },
+  {
+    path: "/accounting/journal-entries",
+    i18nKey: "journalEntries",
+    parentI18nKey: "accounting",
+    icon: JournalIcon,
+    roles: ["administrator", "accountant", "manager"],
+  },
+  {
+    path: "/hr/employees",
+    i18nKey: "hr",
+    icon: Briefcase,
+    roles: ["administrator", "hr_manager"],
+  },
+  // Settings is handled separately at the bottom for now
 ];
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const { currentUser } = useAuth();
+  const { t } = useTranslation(); // Initialize the t function for translations
+
   const accessibleMenuItems = currentUser
-    ? allMenuItems.filter((item) => item.roles.includes(currentUser.role))
+    ? allMenuItemsConfig.filter((item) => item.roles.includes(currentUser.role))
     : [];
 
   return (
@@ -114,7 +126,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         <div className="flex items-center justify-between p-4 h-16 border-b border-gray-700 flex-shrink-0">
           <Link to="/dashboard" className="text-2xl font-bold text-accent">
-            AUKTO ERP
+            {t("appTitle")} {/* Use t function for app title */}
           </Link>
           <button
             onClick={() => setIsOpen(false)}
@@ -131,7 +143,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               (item.path !== "/" || location.pathname === "/");
             return (
               <Link
-                key={item.label}
+                key={item.i18nKey}
                 to={item.path}
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center px-3 py-3 mb-1 rounded-md text-sm font-medium transition-colors ${
@@ -141,7 +153,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 }`}
               >
                 <Icon size={20} className="mr-3 flex-shrink-0" />
-                {item.label}
+                {t(item.i18nKey)} {/* Use t function for menu item labels */}
               </Link>
             );
           })}
@@ -158,7 +170,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               }`}
             >
               <Settings size={20} className="mr-3 flex-shrink-0" />
-              Settings
+              {t("settings")} {/* Use t function for settings */}
             </Link>
           </div>
         )}
