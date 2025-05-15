@@ -166,3 +166,4 @@ const Navbar = ({ toggleSidebar }) => {
 };
 
 export default Navbar;
+// new changes on the navbar 
