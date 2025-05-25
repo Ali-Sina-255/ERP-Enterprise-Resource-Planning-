@@ -25,7 +25,10 @@ class VendorSerializer(serializers.ModelSerializer):
             "name",
             "contact_person",
             "email",
+            "phone_number",
             "status",
             "category",
             "subcategory",
+            "address",
+            "notes",
         ]

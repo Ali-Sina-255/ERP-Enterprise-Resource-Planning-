@@ -36,7 +36,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "email",
             "phone_number",
             "role",
-            "erp_type",  # many-to-many
+            "erp_type",  
             "password",
             "password_confirm",
         ]
