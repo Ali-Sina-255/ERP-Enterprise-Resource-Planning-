@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import (
+    ERPAPIVIEW,
     CreateUserView,
     DeleteUserView,
     MyTokenObtainPairView,
@@ -44,4 +45,5 @@ urlpatterns = [
     path("user/password-change/", PasswordChangeApiView.as_view()),
     path("user/role/", RoleViewSet.as_view()),
     path("user/role/<int:pk>/", RoleDestroyUpdateView.as_view()),
+    path("select-type/", ERPAPIVIEW.as_view()),
 ]

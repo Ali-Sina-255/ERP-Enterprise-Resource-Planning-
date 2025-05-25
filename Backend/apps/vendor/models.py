@@ -1,6 +1,6 @@
-from django.db import models
-
 from apps.common.models import TimeStampedUUIDModel
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Category(TimeStampedUUIDModel):
@@ -31,8 +31,8 @@ class Vendor(TimeStampedUUIDModel):
 
     name = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=300)
-    address = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=50)
+    phone_number = models.CharField(max_length=255)
     status = models.CharField(
         max_length=10, choices=StatusChoices.choices, default=StatusChoices.PENDING
     )
@@ -43,6 +43,8 @@ class Vendor(TimeStampedUUIDModel):
     subcategory = models.ForeignKey(
         SubCategory, on_delete=models.SET_NULL, null=True, blank=True
     )
+    address = models.TextField(max_length=255)
+    notes = models.TextField(verbose_name=_("Notes."))
 
     def __str__(self):
         return self.name

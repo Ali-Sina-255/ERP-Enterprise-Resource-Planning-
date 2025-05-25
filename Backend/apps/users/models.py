@@ -2,8 +2,6 @@ from profile import Profile
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from pyexpat import model
-
 from django.db.models import CharField, EmailField
 
 
@@ -34,20 +32,33 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.is_superadmin = True
         # Assign the Admin role 0) to the superuser
-        #user.role = User.Admin
+        # user.role = User.Admin
 
         user.save(using=self._db)
         return user
 
+
 class Role(models.Model):
     name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> CharField:
         return self.name
 
     class Meta:
         verbose_name_plural = "Roles"
-        ordering = ['name']
+        ordering = ["name"]
+
+
+class ERPTYPE(models.Model):
+    name = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
 
 class User(AbstractBaseUser):
 
@@ -55,6 +66,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    erp_type = models.ManyToManyField(ERPTYPE, blank=True)
     phone_number = models.CharField(max_length=13, blank=True, null=True)
     is_free = models.BooleanField(default=False, blank=True, null=True)
     otp = models.CharField(max_length=8, blank=True, null=True)

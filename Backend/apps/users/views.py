@@ -17,9 +17,10 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import Role, User, UserProfile
+from .models import ERPTYPE, Role, User, UserProfile
 from .serializers import (
     CreateUserSerializer,
+    ERPSerializer,
     MyTokenObtainPairSerializer,
     ProfilePicUpdateSerializer,
     ProfileSerializer,
@@ -27,12 +28,18 @@ from .serializers import (
     UpdateUserSerializer,
     UserSerializer,
 )
-
-# from .tasks import send_email_notification_task
 from .utils import send_email_notification
 
-# Get the custom User model
 User = get_user_model()
+
+
+class ERPAPIVIEW(generics.ListCreateAPIView):
+    queryset = ERPTYPE.objects.all()
+    serializer_class = ERPSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return super().get_queryset()
 
 
 class RoleViewSet(generics.ListCreateAPIView):
