@@ -27,3 +27,16 @@ class Inventory(TimeStampedUUIDModel):
 
     def __str__(self):
         return self.product_name
+
+    @property
+    def current_stock(self):
+        stock = self.stock_items.first()
+        return stock.current_stock if stock else 0
+
+    @property
+    def is_low_stock(self):
+        return self.current_stock < self.low_stock_threshold
+
+    @property
+    def category_name(self):
+        return self.category.name if self.category else None
