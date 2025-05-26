@@ -29,7 +29,7 @@ A modern, scalable ERP system foundation with multi-tenant support, inventory ma
 - Flexible permission system
 
 ## Schema Overview
-
+<!-- ne w -->
 ```mermaid
 erDiagram
     users ||--o{ roles : "RBAC"
