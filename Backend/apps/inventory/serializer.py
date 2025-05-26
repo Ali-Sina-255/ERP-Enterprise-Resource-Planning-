@@ -13,6 +13,10 @@ class CategorySerializer(serializers.ModelSerializer):
 class InventorySerializer(serializers.ModelSerializer):
     current_stock = serializers.SerializerMethodField()
 
+    category_name = serializers.SerializerMethodField()
+    current_stock = serializers.SerializerMethodField()
+    is_low_stock = serializers.SerializerMethodField()
+
     class Meta:
         model = Inventory
         fields = [
@@ -20,6 +24,8 @@ class InventorySerializer(serializers.ModelSerializer):
             "sku",
             "category",
             "current_stock",
+            "is_low_stock",
+            "category_name",
             "cost_price",
             "selling_price",
             "vendor",
@@ -27,6 +33,15 @@ class InventorySerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def get_current_stock(self, obj):
+        return obj.current_stock
+
+    def get_is_low_stock(self, obj):
+        return obj.is_low_stock
+
+    def get_category_name(self, obj):
+        return obj.category_name
 
     def get_current_stock(self, obj):
         # Dynamically fetch the first related Stock object and get its current_stock value
